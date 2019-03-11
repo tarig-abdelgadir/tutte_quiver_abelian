@@ -1,0 +1,433 @@
+\documentclass{amsart}
+\usepackage[utf8]{inputenc}
+\usepackage{mymacros, stmaryrd}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{notn}[thm]{Notation}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{eg}[thm]{Example}
+
+\renewcommand{\Tr}{\textup{Tr}\,}
+
+\title{The Tutte polynomial and toric Nakajima quiver varieties}
+\author{Tarig Abdelgadir}
+\address{The Abdus Salam International Centre for Theoretical Physics, 
+Stada Costiera 11, 
+Trieste 34151, 
+Italy
+}
+\email{tabdelga@ictp.it}
+
+\author{Anton Mellit} 
+\address{University of Vienna, Oskar-Morgenstern-Platz 1, Vienna 1090, Austria}
+\email{anton.mellit@univie.ac.at}
+
+\author{Fernando Rodriguez Villegas}
+\address{The Abdus Salam International Centre for Theoretical Physics, 
+Stada Costiera 11, 
+Trieste 34151, 
+Italy
+}
+\email{villegas@ictp.it}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+% We count the number of points of a Nakajima quiver variety with $\mathbf{v}= (1,\ldots, 1)$ and $\mathbf{w}= (1,0,\ldots, 0)$ as a weighted sum over trees.
+
+% Given $Q$ we begin by ordering the its edges. The weight decomposition depends on the this ordering. For now, we will fix an ordering once and for all. Each tree is a way or rigidifying the quotient. We will also pick our hyperk\"ahler parameter and stability parameter to be generic. This would then give us a fine moduli space and hence every representation in our variety will have finite stabilizer. The tree is supposed to give us a way of rigidfying the stabilizer and then it's a question of counting the number of arrows left in the quiver. The tree also takes care of the relation at each vertex and we are left with an affine space and hence a power of $q$.
+
+% Where do we start. I guess we start with the definition of the varieties in question and their interpretation as moduli of quiver representations. One should also discuss the Tutte polynomial of the underlying quiver and indecomposable representations of the dimension vector in question.
+
+\section{Background and notation}
+\subsection{Quivers}
+Testing2 GitHub.
+
+A quiver $Q$ is specified by two finite sets $Q_0$ and $Q_1$, whose elements are called vertices and edges, together with two maps $h, t \colon Q_1 \rightarrow Q_0$ indicating the vertices at the head and tail of each edge.
+A nontrivial path in $Q$ is a sequence of edges $p = e_1 \dotsb e_m$ with $h(e_{k}) = t(e_{k+1})$ for $1 \leq k < m$.  We set $t(p) = t(e_{1})$ and $h(p)= h(e_m)$.  
+Each $i \in Q_0$ gives a trivial path $e_i$ where $t(e_i) = h(e_i) = i$.  
+The path algebra $\bk Q$ is the $\bk$-algebra whose underlying $\bk$-vector space has a basis consisting of paths in $Q$; the product of two basis elements equals the basis element defined by concatenation of the paths if possible or zero otherwise.  
+A cycle is a path $p$ in which $t(p) = h(p)$. 
+A spanning tree $T$ is a connected subquiver that contains all the vertices with a minimal number or edges, i.e. $|Q_0|-1$.
+The euler characteristic of a quiver is given by $e(Q):= Q_0 - Q_1 +Q_2$ where $Q_2$ is the number of connected components of $Q$.
+For a commutative ring $R$, the $R$-module of functions $Q_0 \rightarrow R$ will be denoted $R^{Q_0}$.
+The double quiver $\Qbar$ to associated to $Q$ is the quiver given by adjoining an extra edge of the opposite orientation for each edge $e \in Q_1$, that is $\Qbar_0 = Q$ and $\Qbar_1= Q_1 \cup (Q^\text{op})_1$.
+The edge of $\Qbar$ corresponding to the opposite of $e \in Q_1$ will be called $e^*$.
+%We will use $\langle -, - \rangle \colon R_{Q_0} \times R^{Q_0} \rightarrow R$ the natural pairing.
+
+%We will also need some notation for edge contraction of our base quiver $Q$.
+Given a non-loop edge $e \in Q_1$ we define the contracted quiver $Q/e$ as follows. The vertices are given by $(Q/e)_0 = (Q_0 \setminus \{t(e),h(e)\}) \cup \{\iota\}$ and the edges by $(Q/e)_1 = Q_1 \setminus \{e\}$. 
+Let $\alpha$ be the inclusion $(Q/e)_1$ in $Q_1$ and $\beta$ be the natural map $\beta \colon Q_0 \rightarrow (Q/e)_0$ taking both $t(e),h(e)$ to $\iota$. 
+The head and tail maps from $h',t' \colon (Q/e)_1 \rightarrow (Q/e)_0$ are given by pre-composing $h,t$ on $Q$ with $\alpha$ and post-composing with $\beta$.
+A spanning tree $T \subset Q$ naturally defines a spanning tree $T/e$ of $Q/e$ for any given non-loop edge $e\in Q_1$.
+Furthermore, given an element $\lambda \in \bk^{Q_0}$, we define $\lambda/e \in \bk^{(Q/e)_0}$ to take the value $\lambda(i)$ at $i \in (Q/e)_0 \setminus \{\iota\}$ and $(\lambda/e)(\iota):=\lambda(h(e))+\lambda(t(e))$.
+Given $\theta \in \bR^{Q_0}$ we define $\theta/e \in \bR^{{Q/e}_0}$ is a similar fashion.
+We will drop the contraction notation `$/e$' from subquivers, subtrees, $\bk^{Q_0}$, $\bR^{Q_0}$ and their corresponding elements when the contraction is clear from the context.
+
+A representation $\bfx = (V_i, x_e)$ of $Q$ consists of a vector space $V_i$ for each $i \in Q_0$ and a linear map $x_e \colon V_{t(e)} \rightarrow V_{h(e)}$ for each $e \in Q_1$. 
+The dimension vector of $\bfx$ is the integer vector $(\dim V_{i})_{i\in Q_0}$.  
+A map between representations $\bfx = (V_i, x_e)$ and $\bfx' = (V_i', x_e')$ is a family $\xi_{i} \colon V_i^{\,} \rightarrow V_i'$ for $i \in Q_0$ of linear maps that are compatible with the structure maps, that is $x_e' \circ\xi_{t(e)} = \xi_{h(e)} \circ x_e$ for all $e \in Q_1$.  
+With composition defined componentwise, we obtain the abelian category of representations of $Q$ denoted rep$_\bk(Q)$. 
+This category is equivalent to the category $\bk Q$-mod of finitely generated left modules over the path algebra.
+
+Given a dimension vector $\bfv$, a $\theta \in \bZ^{Q_0}$ for which $\bfv \cdot \theta=0$ defines a stability notion for representations of $Q$ with dimension vector $\bfv$.
+A representation $\bfx$ is $\theta$-semistable if, for every proper, nonzero subrepresentation $\bfx' \subset \bfx$, we have $\sum_{i \in Q_0} \theta_i \cdot \dim(V_i') \geq 0$.  
+The notion of $\theta$-stability is obtained by replacing $\geq$ with $>$. 
+For a given dimension vector $\bfv \in \bZ_{Q_0}$, a family of $\theta$-semistable quiver representations over a connected scheme $S$ is a collection of rank $\alpha_i$ locally free sheaves $\cV_i$ together with morphisms $\cV_{t(e)} \rightarrow \cV_{h(e)}$ for every $e\in Q_1$. 
+When every $\theta$-semistable representation is $\theta$-stable and the dimension vector is primitive this moduli problem is representable by a scheme $\cM_\theta(Q, \bfv)$, see Proposition 5.3 in \cite{King}.
+
+\subsection{Nakajima quiver varieties}\label{sc:back}
+A more detailed introduction to the ideas below may be found in Ginzburg \cite{Ginzburg} and Kuznetsov \cite{Kuznetsov}.
+
+Given a quiver $Q$, two dimension vectors are required to define a Nakajima quiver variety; we set our dimension vectors to $\mathbf{v}, \mathbf{w}$ to be $(1,\dots,1)$ and $(1,0,\ldots, 0)$, respectively.
+The quiver $\Qbar^\heartsuit$ will be given by $(\Qbar^\heartsuit)_0 = \Qbar_0 \sqcup \{\infty\}$ and $(\Qbar^\heartsuit)_1 = \Qbar_1 \sqcup \{f,f^*\}$ with $t(f) = h(f^*) = \infty$ and $h(f) = t(f^*) = 0$.
+Take $V_i$ to be one dimensional vector spaces indexed by $Q_0$ and $V_\infty$ be the `framing' one-dimensional vector space. 
+We will use $\cR(Q)$ to denote the space $$\text{Hom}(V_\infty, V_0) \oplus \text{Hom}(V_0, V_\infty) \oplus \bigoplus_{e \in Q_1}\big(\text{Hom}(V_{t(e)}, V_{h(e)}) \oplus \text{Hom}(V_{h(e)}, V_{t(e)})\big).$$
+A point in $\cR(Q)$ defines a representation of $\Qbar^\heartsuit$ with dimension vector $(1,\ldots,1)$.
+The vector space $\cR(Q)$ is has a natural symplectic structure: it is the cotangent space of $$\text{Hom}(V_\infty, V_0) \oplus \bigoplus_{e \in Q_1}\text{Hom}(V_{t(e)}, V_{h(e)}).$$
+Change of basis gives a Hamiltonian group action of $G_\mathbf{v}:= \oplus_{i \in Q_0} \GL(V_i)$ on $\cR(Q)$. 
+This induces a moment map $\mu \colon \cR(Q) \rightarrow \frakg_\bfv^*$ given by $$(y,y^*,\bfx,\bfx^*)(\bfz) \mapsto  \Tr((yy^*)\,z_0) + \Tr([\bfx,\bfx^*]\,\bfz).$$
+
+An element $\lambda \in \bk^{Q_0}$ gives an element of $\frakg_\bfv^*$ taking $(x_i)_{i\in Q_0}$ to $\sum_{i\in Q_0} \lambda_i \cdot \text{Tr}\, x_i$.
+The set of such elements defines a subset $\bk^{Q_0} \subset \frakg_\bfv^*$ which coincides with the fixed point set of the coadjoint action of $G_\bfv$ on $\frakg_\bfv^*$.
+For $\lambda \in \bk^{Q_0} \subset \frakg_\bfv^*$ the closed subset $\mu^{-1}(\lambda)$ is given by $(y,y^*,\bfx,\bfx^*) \in \cR(Q)$ that satisfy the following equations 
+\begin{align}\label{eq:forz}
+y y^* + \sum_{\{e \in Q_1\colon h(e)=0\}} x_e x_e^* -  \sum_{\{e \in Q_1\colon t(e)=0\}} x_e^* x_e \,&=\, \lambda_0 \, & i=0 \\
+\label{eq:forz2}\sum_{\{e \in Q_1\colon h(e)=i\}} x_e x_e^* -  \sum_{\{e \in Q_1\colon t(e)=i\}} x_e^* x_e\,&=\,\lambda_i \, & i\ne0.
+\end{align}
+%Equations (\ref{eq:forz}) and  (\ref{eq:forz2}) cut out a closed subset in $Z_\lambda \subset \cR(Q)$.
+The final ingredient for a Nakajima variety is a stability parameter $\theta \in \bR^{Q_0}$.
+This defines a GIT stability condition on the action above; we will assume that our choice of $\theta \in \bR^{Q_0}$ is generic.
+GIT stability is equivalent to a more intrinsic King-like stability condition.
+In our setting, i.e.\ with our choice of dimension vectors this can be stated as follows.
+Define $\theta_\infty =- \sum_{i\in Q_0}\theta_i$ and let $\hat{\theta}$ be the corresponding vector in $\bR^{Q_0 \cup \{\infty\}}$.
+A point $(y,y^*,\bfx,\bfx^*) \in \cR(Q)$ is $\theta$-semistable with respect to the $G_\bfv$-action on $\cR(Q)$ if and only if the quiver representation $\Qbar^\heartsuit$ given by $(V_\infty, V_i, y, y^*, \bfx,\bfx^*)$ of $\Qbar^\heartsuit$ is $\hat{\theta}$-semistable.
+The Nakajima quiver variety corresponding the above choices is then $$\cM_{\lambda, \theta}(\bfv, \bfw) := \mu^{-1}(\lambda)\sslash_\theta G_\bfv.$$
+The closed subset $\mu^{-1}(\lambda) \subset \cR(Q)$ will be denoted by $Z_\lambda$ to lighten the notation. 
+%It maybe is easiest to state what the moment map is after first identifying $\cR(Q)$ with $T^*(\Rep(Q^\heartsuit, \bfv, \bfw))$.
+
+\section{Counting indecomposable representations}\label{sc:indecomp}
+We fix a quiver $Q$.
+The aim in section is to count indecomposable representations of $Q$ with dimension vector $\bfv:= (1,\ldots,1)$.
+
+\begin{defn}
+Given a representation $\bfx = (V_i, x_e)$ of $Q$, let $$E:=\{e\in Q_1 \,|\, x_e \textup{ is not an isomorphism}\}.$$   The {\em inversion graph} $K_\bfx$ of $\bfx$ is then subgraph of $Q - E$.
+\end{defn}
+
+\begin{lem}\label{lm:coninvgr}
+A representation $\bfx$ is indecomposable if and only if its inversion graph $K_\bfx$ is connected.
+\end{lem}
+
+We aim to count indecomposable representations of $Q$ over the field $\mathbb{F}_q$.
+Given Lemma \ref{lm:coninvgr}, we will for now on assume our quiver $Q$ is connected.
+This will be a sum over spanning trees of $Q$.
+
+First, we define a weight associated to a given spanning tree $T \subset Q$ in a recursive fashion and denote it $|Q,T|$.
+This weight will depend on an ordering on the non-loop edges in $Q_1$.
+Fix one once and for all.
+We start the recursion with for $T= \emptyset$, i.e.\ when $|Q_0| =1$; in this case set $|Q,T|=|Q_1|.$
+Let $e \in Q_1$ be the biggest non-loop edge in our ordering then
+$$|Q,T| = \begin{cases} |Q-e, T| & \text{if } e \notin T \\ |Q/e, T/e| & \text{if } e \in T.\end{cases}
+$$
+Note that $Q-e$ and $Q/e$ in the above statement naturally inherit an ordering on their non-loop edges.
+We will drop the $Q$ from notation $|Q,T|$ when the quiver is clear from the context.
+
+\begin{prop}\label{prop:euler}
+Given a quiver $Q$ and a spanning tree $T \subset Q$ we have that $|Q,T| \leq 2-e(Q)$.
+\end{prop}
+
+\begin{thm}\label{thm:numindecom}
+The number of indecomposable representation of $Q$ over $\mathbb{F}_q$ is given by the sum over spanning trees $T \subset Q$ below: $$f(q):=\sum_{T\subset Q}\, q^{|T|}.$$
+\end{thm}
+
+\begin{rem}
+The weight of a given tree depends on the ordering we chose above. 
+However, the statement of Theorem \ref{thm:numindecom} implies that the number of indecomposables is not.
+\end{rem}
+
+The recursive definition of the weight of a given tree above is essentially the same as the recursive definition of the Tutte polynomial of graphs and hence the following result.
+
+\begin{cor}
+The polynomial $f(q)$ is equal to the specialisation $T_Q(1,q)$ of the Tutte polynomial.
+\end{cor}
+
+
+\section{Counting points on the quiver variety}
+
+Let $\cM$ be $\mathcal{M}_{\lambda, \theta}(\bfv, \bfw)$ as defined in Section \ref{sc:back}. We will denote a general point in $\cM$ by $\bfp = (y, y^*, \bfx, \bfx^*)$. 
+The aim here is to count the points of $\cM$ over $\mathbb{F}_q$. 
+This will be done in a similar recursive fashion to the indecomposable representations count in Section \ref{sc:indecomp}.
+In particular, the count will be over spanning trees and will use contraction and deletion operators.
+Deletion is clear so we start by setting up the contraction language for elements of $\cR(Q)$.
+
+\begin{defn}
+For $\bfp \in \cR(Q)$, let $$E:=\{e\in Q_1 \,|\, x_e \textup{ and } x_e^* \textup{ are not isomorphisms}\}.$$   
+The {\em inversion graph} $K_\bfp \subset Q$ of $\bfp$ is then $Q - E$.
+\end{defn}
+
+Take $\bfp \in \cR(Q)$ and assume $e\in K_\bfp$.
+Without loss of generality we take $x_e$ to be the isomorphism.
+We define a point $\bfp/e$ in $\cR(Q/e)$ using the following recipe.
+Set the vector space at the new vertex $\iota$ to be the graph of $x_e$, i.e.\ $V_\iota := \{(v, x_e(v)) \in V_{t(e)} \oplus V_{h(e)} \, | \, v \in V_{t(e)}\}$.
+Vector spaces at other vertices remain unchanged.
+The vector space $V_\iota$ is naturally isomorphic to both $V_{t(e)}$ and $V_{h(e)}$.
+We use these isomorphism to associate linear maps $x_{e'}$ and $x_{e'}^*$ for every $e' \in (Q/e)_1$ whose corresponding edge in $Q$ is incident to either $t(e)$ or $h(e)$.
+Linear maps for the other edges are clear.
+
+The following Lemmas confirm that that the contraction of $\bfp$ behaves well with respect to the hyper-K\"ahler parameters $(\lambda, \theta)$.
+
+\begin{lem}
+Take $e\in K_\bfp$. If $\bfp \in \cR(Q)$ is $\theta$-stable then $\bfp/e \in \cR(Q/e)$ is $(\theta/e)$-stable.
+\end{lem}
+
+\begin{proof}
+It easier to see the contrapositive.
+Assume $\bfp/e$ is $(\theta/e)$-unstable.
+Let $\bfq/e \subset \bfp/e$ be a de-stabilising submodule.
+To lift $\bfq/e$ to $\cR(Q)$ it suffices to specify the vector spaces at $t(e)$ and $h(e)$.
+We take them to be $V_{t(e)}$ and $V_{h(e)}$ respectively, if the vector space defined $\bfq/e$ by at $\iota$ is full dimensional.
+If $0$ is the vector space defined $\bfq/e$ by at $\iota$ we take both of them to be 0.
+This lift then de-stabilises $\bfp$.
+\end{proof}
+
+\begin{lem}
+Take $e \in K_\bfp$. If $\bfp \in Z_\lambda$ then $\bfp/e \in (Z/e)_{(\lambda/e)}.$
+\end{lem}
+
+\begin{proof}
+We should check equations (\ref{eq:forz}) and (\ref{eq:forz2}) for $Q/e$.
+The only nontrivial check is at the vertex $\iota$.
+Without loss of generality, assume $x_e$ is the isomorphism.
+First conjugate the equation corresponding to $t(e)$ with the isomorphism $V_{t(a)} \rightarrow V_\iota$ and that corresponding to $h(e)$ with the isomorphism $V_\iota \rightarrow V_{h(e)}$.
+Taking the sum of the conjugates kills off the term corresponding to $e$ and the result follows.
+\end{proof}
+
+Next we address spanning trees in this setting.
+
+\begin{lem}\label{lm:coninvgr2}
+Take $\theta \in \bR^{Q_0}$: if $\bfp \in \cR(Q)$ is strictly $\theta$-stable then $K_\bfp$ is connected.
+\end{lem}
+
+\begin{proof}
+Assume $K_\bfp$ is not connected. Choose a connected component that does not contain $0$ and let $J \subset Q_0$ be the vertices of this component. 
+Let $\delta$ be the indicator function for $J \subset Q_0$ then elements $(t^{\delta(i)}\cdot 1_i)_{i \in Q_0} \in  G_\bfv$ stablise $\bfx$ for any $t \in \bG_m$.
+This gives a positive dimensional stabiliser subgroup and contradicts strict $\theta$-stability.
+One may also see the lemma by decomposing the corresponding quiver representation into two direct summands and using King stability.
+\end{proof}
+
+Lemma \ref{lm:coninvgr2} above implies that given a generic $\theta \in \bR^{Q_0}$ that the inversion graph contains a spanning tree.
+For a specific choice of generic $\theta$ more can be said.
+
+In a tree $T \subset Q$, every edge $e \in Q$ splits $T$ into two connected components call them $T_{t(e)}$ and $T_{h(e)}$.
+If $\sum_{i \in T_{t(e)}} \theta_i < \sum_{j \in T_{h(e)}}\theta_j$ we take $e$ to be oriented as in $Q$.
+If $\sum_{i \in T_{t(e)}} \theta_i < \sum_{j \in T_{h(e)}}\theta_j$ we take $e$ to be reverse oriented.
+We may then view $T$ as a subquiver of the double quiver $\Qbar$
+
+This orientation maybe equivalently defined in slightly different language.
+The incidence homomorphism $\textup{inc} \colon \bR^{Q_1} \rightarrow \bR^{Q_0}$ is defined by $\chi_e \mapsto \chi_{h(e)}-\chi_{t(e)}$.
+The image of $\text{inc}$ lies is the hyperplane of $\bR^{Q_0}$ that satisfies $\sum_{i\in Q_0} \chi_i =0$.
+The vector $\chi_0 \in \bR^{Q_0}$ along with the inc-images of the edges of a spanning tree of $T \subset Q$ define a basis of $\bR^{Q_0}$.
+That is, a spanning tree decomposes the stability space $\bR^{Q_0}$ into $2^{Q_0}$ simplicial cones.
+A generic stability parameter $\theta$ lies in precisely one of these cones.
+The cone to which $\theta$ belongs then defines an orientation on our spanning tree $T$.
+The discussion above inspires the following definitions.
+
+% \begin{defn}
+% Fix $\theta \in \bR^{Q_0}$ a generic stability parameter and a $\theta$-stable point $\bfp$ in $\cR(Q)$.
+% We say an edge $e$ of $K_\bfp$ is {\em $\theta$-oriented} if one of the following holds:
+% \begin{align*}
+%     \langle \theta, \text{inc}(e)\rangle \leq 0 & \text{ and } x_e^* \text{ is an isomorphism,} \\
+%     \langle \theta, \text{inc}(e)\rangle \geq 0 & \text{ and } x_e \text{ is an isomorphism.}
+% \end{align*}
+% \end{defn}
+
+% \begin{rem}
+% It is maybe easier to interpret the above paragraph after contacting $\Qbar^\heartsuit$ at either $y$ or $y^*$; one of which will be an isomorphism for a $\theta$-stable point $(y,y^*,\bfx, \bfx^*) \in \cR(Q)$. 
+% \end{rem}
+
+\begin{notn}
+Fix $\theta \in \bR^{Q_0}$ a generic stability parameter and let $T$ be a spanning tree of $Q$. 
+We will write $T^\theta$ for the oriented spanning tree of $\Qbar$ defined by the $\theta$ induced orientation.
+\end{notn}
+
+\begin{lem}[Orientation is preserved under contraction]
+Fix $\theta \in \bR^{Q_0}$ a generic stability parameter and let $T$ be a spanning tree of $Q$.
+For $e \in T^\theta$, we have that $(T^\theta)/e \subset \overline{(Q/e)}$ is the $\theta/e$ oriented spanning tree of the spanning tree $T/e \subset Q/e$.
+Here we abuse notation and refer to the edge in $Q$ and a corresponding edge in $\Qbar$ by the same symbol $e$.
+\end{lem}
+
+\begin{proof}
+This is almost straight forward using the first definition of the orientation.
+Here we give a proof using the second definition for the readers convenience.
+
+Let $\pi\colon \bR^{Q_0}\rightarrow \text{inc}(e)^\perp$ be the projection on the hyperspace perpendicular to $\text{inc}(e)$.
+Note that $\pi(\chi_{t(e)}) = \pi(\chi_{h(e)}) = \chi_{t(e)} + \chi_{h(e)}$ since $\text{inc}(e)= \chi_{h(e)} - \chi_{t(e)}.$
+The other standard basis vectors are perpendicular to $\text{inc}(e)$ and so are fixed by $\pi$.
+The above observations and the equality $Q_0 \setminus \{t(e), h(e)\} = (Q/e)_0 \setminus \{\iota\}$ identifies $\text{inc}(e)^\perp$ with the space $\bR^{(Q/e)_0}$.
+
+Under this identification $\pi(\theta)$ coincides with $\theta/e$.
+Furthermore, the projection of the cone $\langle \text{inc}(e) \,|\, e\in T^\theta\ \rangle \subset \bR^{Q_0}$ is identified with $\langle\text{inc}(\tilde{e}) \, | \, \tilde{e} \in T/e\rangle \subset \bR^{(Q/e)_0}$.
+\end{proof}
+
+\begin{defn}
+Take $\bfp \in \cR(Q)$ and let $$\Ebar :=\{e\in \Qbar_1 \,|\, x_e \text{ is not isomorphisms}\}.$$   
+The {\em oriented inversion graph} $K_{\bfp}^o \subset \Kbar_\bfp \subset \Qbar$ of $\bfp$ is then $\Qbar - \Ebar$.
+\end{defn}
+
+
+\begin{lem}\label{lm:orientedtree}
+Let $\theta \in \bR^{Q_0}$ be a generic stability parameter and take $\bfp \in \cR(Q)$. 
+The point $\bfp$ is $\theta$-stable if and only if there exist a subtree $T\subset Q$ such that $T^\theta \subset K_\bfp^o$.
+\end{lem}
+
+\begin{proof}
+Assume $\bfp$ is $\theta$-stable.
+The representation corresponding to $\bfp$ is indecomposable and hence there exists a tree $T \subset K_\bfp$.
+Now suppose $T^\theta \not\subset K_\bfp^o$, we may assume that $x_{e'}=0$ for all $e' \in \Qbar_1 \setminus (T^\theta)_1$. 
+Take $e \in T$ to be the unoriented edge and $Q_{t(e)}$ and $Q_{h(e)}$ as above.
+Setting $U_{e'} = V_{e'}$ for $e' \in (Q_t)_0$ and $U_{e'}=0$ for $e' \in (Q_h)_0$ gives a destabilising subrepresentation of $\bfp$ since the complimentary representation gives a subrepresentation of $\bfp$ and hence is positive with respect to $\theta$.
+
+Now assume $\bfp$ is unstable.
+We may suppose that there is a unique tree $T \subset K_\bfp$.
+Let $\bfq$ be a destabilising subrepresentation.
+Since it is a strict subrepresentation it will contain an edge $e$ whose corresponding linear map is not an isomorphism.
+Taking the subrepresentation defined by setting .
+\end{proof}
+
+As in Section \ref{sc:indecomp}, we fix an ordering on the edges of $Q$.
+
+\begin{notn}\label{notn:intree}
+Fix a stability parameter $\theta \in \bR^{Q_0}$. Let $T \subset Q$ be a subtree and $e\in Q_1$ be the biggest edge. We say 
+%$\bfp \in \cR(Q)_T^\theta$ if either of the following statements if either:
+%\begin{align*}
+%     (e \in T \text{ and } T^\theta \subset K_\bfp^o) &\Longrightarrow \cR(Q/e)_T^\theta \\
+%     \text{or} \quad\quad (e \notin T \text{ or } T^\theta \not\subset K_\bfp^o) &\Longrightarrow \cR(Q-e)_T^\theta,.
+% \end{align*}
+%$$e \in T \text{ and } T^\theta \subset K_\bfp^o \Longrightarrow \cR(Q/e)_T^\theta$$ or
+%$$e \notin T \Longrightarrow \cR(Q-e)_T^\theta.$$
+$$\bfp \in \cR(Q)_T^\theta \,\text{ if }\,\,\begin{cases} \bfp/e \in \cR(Q/e)_T^\theta & \text{ when } e \in T \text{ and } T^\theta \subset K_\bfp^o \\ \bfp-e \in \cR(Q-e)_T^\theta & \text{ otherwise}.\end{cases}$$
+If $Q$ has one vertex then $T$ is empty and we take every $\bfp \in \cR(Q)$ to be in $\cR(Q)_T$.
+Furthermore, $Z_{\lambda,T}^\theta$ will denote $Z_{\lambda} \cap \cR(Q)_T^\theta$.
+\end{notn}
+% We say $\bfp \in \cR(Q)_T^\theta$ and $T \subset Q$ a subtree. If when the biggest edge is in $T$ and $T^\theta \subset K_\bfp^o$ then $\bfp/e$ is in $\cR(Q/e)^\theta_T$. If the biggest edge is not in 
+% We say $\bfp \in \cR(Q)$ is in $\cR(Q)_T^\theta$ if $T^\theta \subset K_\bfp^o$ and the biggest edge of $K_p$ for which this is true is in $T$, $T^\theta \subset K_\bfp^o$ and $\bfp/e \in \cR(Q)_T^\theta$.
+% Furthermore, $Z_{\lambda,T}^\theta$ will denote $Z_{\lambda} \cap \cR(Q)_T^\theta$.
+% \begin{notn}\label{notn:intree}
+% Choose $\theta \in \bR^{Q_0}$ a generic stability parameter. Let $T$ be a spanning tree of $Q$ and $e$ be the biggest edge in $K_\bfp$.
+% We say $\bfp \in \cR(Q)$ is in $\cR(Q)_T^\theta$ if the following hold:
+% \begin{enumerate}    
+%     \item the edge $e$ is in $T$,
+%     \item the oriented spanning tree $T^\theta$ is in $K_\bfp^o$,
+%     \item the contracted point $\bfp/e$ is in $\cR(Q/e)^\theta_T$.
+% \end{enumerate}
+% If $Q$ has one vertex then $T$ is empty and so every $\bfp \in \cR(Q)$ is in $\cR(Q)_T$.
+% Furthermore, $Z_{\lambda,T}^\theta$ will denote $Z_{\lambda} \cap \cR(Q)_T^\theta$
+% \end{notn}
+% For $T$ a spanning tree of $Q$, we use $\mathcal{R}(Q)_T$ and $Z_T$ to denote the subset of the representation space $$\{ \bfp\in \mathcal{R}(Q) \,|\, T \subset K_\bfp\}$$ and its intersection with $Z$, respectively.
+% Lemma \ref{lm:coninvgr2} then implies that $\mathcal{R}(Q)$ is a union of such spaces.
+% Furthermore, we note that $\mathcal{R}(Q)_T$ is invariant under the action of $G_\mathbf{v}$.
+% We will use $\cM_T$ to denote the the subset of $\cM$ whose points parameterise equivalence classes in $\cR(Q)$
+Lemma \ref{lm:orientedtree} implies that for every $\theta$-stable $\bfp \in \cR(Q)$ there exists a tree $T \subset Q$ for which $\bfp \in \cR(Q)_T^\theta$.
+The definition of $\cR(Q)_T^\theta$ implies that this tree is unique.
+
+The subsets $\cR(Q)_T^\theta$ and $Z_{\lambda,T}^\theta$ are $G_\bfv$-invariant since whether or not a linear map is an isomorphism is fixed by this action.
+We will use $\cM_T \subset \cM$ to denote the quotient of $Z_{\lambda,T}^\theta$ by the $G_\bfv$-action.
+Moreover, for $e\in Q_1$ a non-loop edge we introduce the notation $\cM/e$ for the Nakajima quiver variety on the contracted quiver $Q/e$ with dimension vectors $\bfv= (1,\ldots,1)$, $\bfw= (1,0,\ldots,0)$ and hyper-K\"ahler parameters $\lambda/e$ and $\theta/e$.
+We use $\cM-e$ in an analogous fashion.
+
+\begin{thm}\label{thm:contract}
+Let $T$ be a spanning tree of $Q$ and $e$ be the biggest edge in $Q$. 
+If $e \in T$ then $$|\mathcal{M}_T(\mathbb{F}_q)| = |(\mathcal{M}/e)_T(\mathbb{F}_q)|.$$
+\end{thm}
+
+\begin{proof}
+The morphism $Z_\lambda \rightarrow (Z/e)_\lambda$ given by $\bfp \mapsto \bfp/e$ is $G_\bfv$-equivariant.
+Furthermore, it takes elements of $Z_{\lambda,T}^\theta$ to $(Z/e)_{\lambda,T}^\theta$  giving a morphism $\cM_T \rightarrow (\cM/e)_T$. 
+Next we construct an inverse morphism.
+
+Take $\bfq \in (Z/e)_{\lambda,T}^\theta$ and assume without loss of generality that that $e \in T^\theta$ (as opposed to $e^* \in T^\theta$). 
+The aim is to provide a lift $\bfp \in Z_{\lambda,T}^\theta$.
+We start by defining linear maps for every edge in $\Qbar^\heartsuit$.
+The linear maps associated to edges not incident to $t(e)$ or $h(e)$ are clear.
+For all non-$e$ edges incident to $t(e)$ and $h(e)$, we choose isomorphisms $\phi \colon V_{t(e)} \rightarrow V_\iota$ and $\psi \colon V_\iota \rightarrow V_{h(e)}$ to unwind their corresponding linear maps and define $x_e$ to be $\psi \circ \phi$.
+This choice of $\phi$ and $\psi$ will come out in the wash when we quotient by the action of $G_\bfv$.
+The only ambiguity left is the linear map associated to $x_e^*$.
+We use the equation corresponding to $t(e)$ from either (\ref{eq:forz}) or (\ref{eq:forz2}) to read off $x_e^*$: post-multiplying the equation by $x_e^{-1}$ reduces the $e$-term to $x_e^*$.
+One could have equally well used the equation corresponding to $h(e)$ to yield the same result.
+Up to the choice of isomorphisms $\phi$ and $\psi$, we have a point $\bfp \in Z_\lambda$ and since $x_e$ is an isomorphism by construction $\bfp \in Z_{\lambda,T}^\theta$
+
+% Our stability parameter may be decomposed as $\theta = \theta/e + \alpha \text{inc}(e)$ where $\theta/e$ is the projection of $\theta$ to the hyperplane $\text{inc}(e)^\perp$ and $\alpha > 0$.
+% Assume $\bfp$ is $\theta$-unstable and $\rho = (U_i, u_e, u_e^*)$ a destabilising subrepresentation.
+% The linear map $x_e$ is an isomorphism, we have that $u_e$ is injective and $\dim U_{t(e)} \leq \dim U_{h(e)}$.
+% Therefore, $\theta/e(\rho)<0$.
+% Replacing $U_{h(e)}$ with $\text{im}(u_e) \subset U_{h(e)}$ also gives a subrepresentation of $\bfp$.
+% Since $U_{t(e)} \cong \text{im}(u_e)$ this pairs to 0 with $\text{inc}(e)$
+% Now when $U_{t(e)}$ is isomorphic to $U_{h(e)}$ we may define the contraction of $\rho/e$ in a similar fashion to how we defined $\bfp/e \in \cR(Q/e)$; this would destabilise $\bfq$ with respect to $\theta/e$.
+% But we assumed $\bfq \in (Z/e)_{\lambda,T}^\theta$ therefore $\bfp$ is $\theta$-stable.
+% Combining this with the fact that $x_e$ is an isomorphism, and so $\theta$-oriented, and that $e$ is the biggest edge gives us that $\bfp \in Z_{\lambda,T}^\theta$.
+
+It remains to act by $G_\bfv$ to remove the ambiguity of the choice of $\phi$ and $\psi$ and descend to a morphism $(\cM/e)_T \rightarrow \cM$.
+Checking these are mutual inverses is left to the reader.
+% Let $W \in Z_T$ then define $W/e \in (Z/e)_{T/e}$ as follows: the vector spaces are the same and we take the vector space at the head. We pre-compose linear maps with tail at $h(e)$ with $w_e$ and post-compose linear maps with head at $t(e)$ with $w_e^{-1}$. This gives a representation in $\cR(Q/e)$. We claim that this lies in $Z_{\lambda/e}$.
+% Then given something in $Z/e$ then pick an isomorphism $w_e$ from $V_{t(e)}$ to $V_{h(e)}$ and unwind what happens. Need to define $w_{e^*}$ using the relation at any given vertex using the relation.
+% Given a $W \in R(Q)_T$ we can associate a $W/e \in R(Q)_T$. Now we start with a representation in $R(Q)_T$ and define one in the other space. All the vector spaces are the complex numbers and the only morphism that is ambiguous are the ones corresponding the edge $e$ so set in the stable direction to be one and in the other direction we may use the relation at the head or tail of edge. We use the definition we give of contraction to help with this. This gives a one-to-one correspondence between the equivalence classes.
+% Maybe it is best to form a one-to-one correspondence between the points in the representation space. There is one direction of the arrows that forces the representation to be stable set that to be 1. Now we consider the relation at the head which is given by some sum. Then we set 
+\end{proof}
+
+\begin{thm}\label{thm:delete}
+Let $T$ be a spanning tree of $Q$ and $e$ be the biggest edge in $Q$.
+If $e \notin T$ then $$|\mathcal{M}_T(\mathbb{F}_q)| = q \cdot |(\mathcal{M}-e)_T(\mathbb{F}_q)|.$$
+\end{thm}
+
+\begin{proof}
+We adopt a similar strategy to Proof of Theorem \ref{thm:contract}.
+Take $\bfq \in (Z-e)_{\lambda,T}^\theta$, the aim is to provide a lift $\bfp \in Z_{\lambda,T}^\theta$.
+The linear maps associated to all edges that are not $e$ may be read off from $\bfq$.
+
+To finish defining the lift, it remains to fix the linear maps $x_e$ and $x_e^*$.
+Since $T$ is a spanning tree, there is a unique simple un-oriented path $\tau$ whose endpoints coincide with that of $e$.
+Let $e'$ be the smallest edge in $\tau$ with respect to our ordering.
+Removing $e'$ from $T$ and replacing it with $e$ gives a spanning tree $T'$ of $Q$.
+The orientation of $e' \in T^\theta$ defines an orientation on the simple closed path $\tau e$, this in turn gives us the orientation of $e \in (T')^\theta$.
+To ensure that $\bfq$ lifts to a point $Z_{\lambda,T}^\theta$ and not in $Z_{\lambda,T'}^\theta$ we define $x_e$ and $x_e^*$ as follows: if the orientation on $e$ induced by $e'$ is the same as the one coming from $Q$ we set $x_e=0$, if not we set $x_e^*=0$.
+For the other yet undefined linear map we pick an arbitrary $n \in \Hom(V_{h(e)}, V_{t(e)})$ and set $x_e^*:=n$ (or $x_e=n^\vee$, respectively).
+The equation (\ref{eq:forz}) and (\ref{eq:forz2}) in $Z_{\lambda,T}^\theta$ then follow directly from those in $(Z-e)_{\lambda,T}^\theta$; $\theta$-stability follows from Lemma \ref{lm:orientedtree} and hence we our lift lives in $Z_{\lambda,T}^\theta$.
+
+In summary, the choices of linear maps detailed above give an isomorphism $$(Z-e)_{\lambda,T}^\theta \longrightarrow Z_{\lambda,T}^\theta.$$
+After acting by $G_\bfv$ this descends to a bijection $$|\mathcal{M}_T(\mathbb{F}_q)| \longrightarrow |(\mathcal{M}-e)_T(\mathbb{F}_q)|.$$
+The result then follows from $|\Hom(V_{h(e)}, V_{t(e)})|= q$.
+\end{proof}
+
+\begin{cor}
+The number of points of $\cM$ over $\bF_q$ is given by $q^{2-e(Q)} f(q)$.
+\end{cor}
+
+\begin{proof}
+First we compute the number of points over $\bF_q$ of $\cM_{\lambda,\theta}(Q, \bfv, \bfw)$ when $|Q_0|=1$.
+Assume $\theta_\infty<0$ or equivalently that $\theta_0>0$.
+King stability then gives that the linear map $y \in \Hom(V_\infty, V_0)$ is injective and hence an isomorphism in our setting.
+Acting by $G_\bfv = \GL(V_0)$ we may fix $y$, furthermore this exhausts the $G_\bfv$-action.
+The linear map $y^*$ is given by pre-multiplying equation (\ref{eq:forz}) by $y^{-1}$ and its value also exhausts the equation.
+We are left with a free choice of linear maps in $\End(V_0)$ for every edge of the double quiver $\Qbar$, therefore $|\cM(\bF_q)|=q^{2|Q_1|}$.
+
+We now let $Q$ be a general quiver. 
+Proposition \ref{prop:euler} gives that $|T| \leq (2-e(Q))$ for a spanning tree $T \subset Q$.
+The difference $(2-e(Q))-|T|$ is precisely the number of times one uses the deletion operator when reducing $Q$ to a quiver of one vertex in the recursion computing $|T|$.
+
+Theorems \ref{thm:contract} and \ref{thm:delete} along with these two observations give that $|\cM_T(\bF_q)|= q^{2 |T|} \cdot q^{(2-e(Q))-|T|} = q^{|T|+(2- e(Q))}$.
+The fact that for every $\bfp \in \cM$ there exists a unique spanning tree $T \subset Q$ such that $\bfp \in \cM_T$ then gives the result.
+\end{proof}
+
+\bibliographystyle{amsalpha}
+\bibliography{references}
+
+\end{document}
