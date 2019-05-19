@@ -1,6 +1,7 @@
 \documentclass{amsart}
 \usepackage[utf8]{inputenc}
-\usepackage{mymacros, stmaryrd}
+\usepackage{mymacros, stmaryrd, tikz, pstricks, pst-node, pst-text, pst-tree, subfigure, epsfig, psfrag}
+\usepackage{float}
 
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{cor}[thm]{Corollary}
@@ -126,16 +127,16 @@ A representation $\bfx$ is indecomposable if and only if its inversion graph $K_
 \end{lem}
 
 We aim to count indecomposable representations of $Q$ over the field $\mathbb{F}_q$.
-Given Lemma \ref{lm:coninvgr}, we will for now on assume our quiver $Q$ is connected.
 This will be a sum over spanning trees of $Q$.
+Given Lemma \ref{lm:coninvgr}, we will for now on assume our quiver $Q$ is connected.
 
-First, we define a weight associated to a given spanning tree $T \subset Q$ in a recursive fashion and denote it $|Q,T|$.
-This weight will depend on an ordering on the non-loop edges in $Q_1$.
+First, we define the {\em external activity} of a given spanning tree $T \subset Q$ in a recursive fashion and denote it $|Q,T|$.
+To do so we require an ordering on the non-loop edges in $Q_1$.
 Fix one once and for all.
-We start the recursion with for $T= \emptyset$, i.e.\ when $|Q_0| =1$; in this case set $|Q,T|=|Q_1|.$
 Let $e \in Q_1$ be the biggest non-loop edge in our ordering then
 $$|Q,T| = \begin{cases} |Q-e, T| & \text{if } e \notin T \\ |Q/e, T/e| & \text{if } e \in T.\end{cases}
 $$
+For $|Q_0| =1$ we set $|Q,T|=|Q_1|.$
 Note that $Q-e$ and $Q/e$ in the above statement naturally inherit an ordering on their non-loop edges.
 We will drop the $Q$ from notation $|Q,T|$ when the quiver is clear from the context.
 
@@ -143,23 +144,28 @@ We will drop the $Q$ from notation $|Q,T|$ when the quiver is clear from the con
 Given a quiver $Q$ and a spanning tree $T \subset Q$ we have that $|Q,T| \leq 2-e(Q)$.
 \end{prop}
 
+\begin{proof}
+The number $|Q,T| - (2-e(Q))$ is the number of times deletion is used to reduce $Q$ to a one vertex quiver when defining the external activity using contraction/deletion.
+\end{proof}
+
 \begin{thm}\label{thm:numindecom}
 The number of indecomposable representation of $Q$ over $\mathbb{F}_q$ is given by the sum over spanning trees $T \subset Q$ below: $$f(q):=\sum_{T\subset Q}\, q^{|T|}.$$
 \end{thm}
 
 \begin{rem}
-The weight of a given tree depends on the ordering we chose above. 
+The external activity of a given tree depends on the ordering we chose above. 
 However, the statement of Theorem \ref{thm:numindecom} implies that the number of indecomposables is not.
 \end{rem}
 
-The recursive definition of the weight of a given tree above is essentially the same as the recursive definition of the Tutte polynomial of graphs and hence the following result.
+The Tutte polynomial of graphs may also be expressed as a sum over spanning trees.
+In fact, we have the following result.
 
 \begin{cor}
 The polynomial $f(q)$ is equal to the specialisation $T_Q(1,q)$ of the Tutte polynomial.
 \end{cor}
 
 
-\section{Counting points on the quiver variety}
+\section{Counting points on the quiver variety}\label{sc:qvariety}
 
 Let $\cM$ be $\mathcal{M}_{\lambda, \theta}(\bfv, \bfw)$ as defined in Section \ref{sc:back}. We will denote a general point in $\cM$ by $\bfp = (y, y^*, \bfx, \bfx^*)$. 
 The aim here is to count the points of $\cM$ over $\mathbb{F}_q$. 
@@ -183,6 +189,18 @@ Linear maps for the other edges are clear.
 
 The following Lemmas confirm that that the contraction of $\bfp$ behaves well with respect to the hyper-K\"ahler parameters $(\lambda, \theta)$.
 
+\begin{lem}\label{lm:contralambda}
+Take $e \in K_\bfp$. If $\bfp \in Z_\lambda$ then $\bfp/e \in (Z/e)_{(\lambda/e)}.$
+\end{lem}
+
+\begin{proof}
+We should check equations (\ref{eq:forz}) and (\ref{eq:forz2}) for $Q/e$.
+The only nontrivial check is at the vertex $\iota$.
+Without loss of generality, assume $x_e$ is the isomorphism.
+First conjugate the equation corresponding to $t(e)$ with the isomorphism $V_{t(a)} \rightarrow V_\iota$ and that corresponding to $h(e)$ with the isomorphism $V_\iota \rightarrow V_{h(e)}$.
+Taking the sum of the conjugates kills off the term corresponding to $e$ and the result follows.
+\end{proof}
+
 \begin{lem}
 Take $e\in K_\bfp$. If $\bfp \in \cR(Q)$ is $\theta$-stable then $\bfp/e \in \cR(Q/e)$ is $(\theta/e)$-stable.
 \end{lem}
@@ -195,18 +213,6 @@ To lift $\bfq/e$ to $\cR(Q)$ it suffices to specify the vector spaces at $t(e)$ 
 We take them to be $V_{t(e)}$ and $V_{h(e)}$ respectively, if the vector space defined $\bfq/e$ by at $\iota$ is full dimensional.
 If $0$ is the vector space defined $\bfq/e$ by at $\iota$ we take both of them to be 0.
 This lift then de-stabilises $\bfp$.
-\end{proof}
-
-\begin{lem}
-Take $e \in K_\bfp$. If $\bfp \in Z_\lambda$ then $\bfp/e \in (Z/e)_{(\lambda/e)}.$
-\end{lem}
-
-\begin{proof}
-We should check equations (\ref{eq:forz}) and (\ref{eq:forz2}) for $Q/e$.
-The only nontrivial check is at the vertex $\iota$.
-Without loss of generality, assume $x_e$ is the isomorphism.
-First conjugate the equation corresponding to $t(e)$ with the isomorphism $V_{t(a)} \rightarrow V_\iota$ and that corresponding to $h(e)$ with the isomorphism $V_\iota \rightarrow V_{h(e)}$.
-Taking the sum of the conjugates kills off the term corresponding to $e$ and the result follows.
 \end{proof}
 
 Next we address spanning trees in this setting.
@@ -288,17 +294,20 @@ The point $\bfp$ is $\theta$-stable if and only if there exist a subtree $T\subs
 \end{lem}
 
 \begin{proof}
-Assume $\bfp$ is $\theta$-stable.
-The representation corresponding to $\bfp$ is indecomposable and hence there exists a tree $T \subset K_\bfp$.
-Now suppose $T^\theta \not\subset K_\bfp^o$, we may assume that $x_{e'}=0$ for all $e' \in \Qbar_1 \setminus (T^\theta)_1$. 
-Take $e \in T$ to be the unoriented edge and $Q_{t(e)}$ and $Q_{h(e)}$ as above.
-Setting $U_{e'} = V_{e'}$ for $e' \in (Q_t)_0$ and $U_{e'}=0$ for $e' \in (Q_h)_0$ gives a destabilising subrepresentation of $\bfp$ since the complimentary representation gives a subrepresentation of $\bfp$ and hence is positive with respect to $\theta$.
+Assume $\bfp$ is $\theta$-stable and that $T^\theta \not\subset K_\bfp^o$ does not exist.
+Take a tree $T \subset K_\bfp$ and an unoriented edge $e \in T$.
+We let $Q_{t(e)}$ and $Q_{h(e)}$ be as above.
+We may assume that there are no arrows $a \in \Qbar_1$ from $Q_{h(e)}$ to $Q_{t(e)}$ whose corresponding linear map $x_{a}$ is an isomorphism, otherwise we replace $e$ with $a$ and get a tree with one less unoriented arrow.
+Setting $U_{e'} = V_{e'}$ for $e' \in (Q_t)_0$ and $U_{e'}=0$ for $e' \in (Q_h)_0$ gives a destabilising subrepresentation of $\bfp$.
+%The representation corresponding to $\bfp$ is indecomposable and hence there exists a tree $T \subset K_\bfp$.
+%Now suppose $T^\theta \not\subset K_\bfp^o$, we may assume that $x_{e'}=0$ for all $e' \in \Qbar_1 \setminus (T^\theta)_1$. 
+%Take $e \in T$ to be the unoriented edge and $Q_{t(e)}$ and $Q_{h(e)}$ as above.
+%Setting $U_{e'} = V_{e'}$ for $e' \in (Q_t)_0$ and $U_{e'}=0$ for $e' \in (Q_h)_0$ gives a destabilising subrepresentation of $\bfp$ since the complimentary representation gives a subrepresentation of $\bfp$ and hence is positive with respect to $\theta$.
 
 Now assume $\bfp$ is unstable.
-We may suppose that there is a unique tree $T \subset K_\bfp$.
 Let $\bfq$ be a destabilising subrepresentation.
-Since it is a strict subrepresentation it will contain an edge $e$ whose corresponding linear map is not an isomorphism.
-Taking the subrepresentation defined by setting .
+Since the subrepresentation $\bfq$ is proper it splits our quiver into two connected components.
+Any edge between the connected components will be not have the correct orientation.
 \end{proof}
 
 As in Section \ref{sc:indecomp}, we fix an ordering on the edges of $Q$.
@@ -344,7 +353,7 @@ We use $\cM-e$ in an analogous fashion.
 
 \begin{thm}\label{thm:contract}
 Let $T$ be a spanning tree of $Q$ and $e$ be the biggest edge in $Q$. 
-If $e \in T$ then $$|\mathcal{M}_T(\mathbb{F}_q)| = |(\mathcal{M}/e)_T(\mathbb{F}_q)|.$$
+If $e \in T$ then $$\mathcal{M}_T \simeq (\mathcal{M}/e)_T.$$
 \end{thm}
 
 \begin{proof}
@@ -383,7 +392,7 @@ Checking these are mutual inverses is left to the reader.
 
 \begin{thm}\label{thm:delete}
 Let $T$ be a spanning tree of $Q$ and $e$ be the biggest edge in $Q$.
-If $e \notin T$ then $$|\mathcal{M}_T(\mathbb{F}_q)| = q \cdot |(\mathcal{M}-e)_T(\mathbb{F}_q)|.$$
+If $e \notin T$ then $$\mathcal{M}_T \simeq (\mathcal{M}-e)_T \times \bA_k^1.$$
 \end{thm}
 
 \begin{proof}
@@ -400,12 +409,11 @@ To ensure that $\bfq$ lifts to a point $Z_{\lambda,T}^\theta$ and not in $Z_{\la
 For the other yet undefined linear map we pick an arbitrary $n \in \Hom(V_{h(e)}, V_{t(e)})$ and set $x_e^*:=n$ (or $x_e=n^\vee$, respectively).
 The equation (\ref{eq:forz}) and (\ref{eq:forz2}) in $Z_{\lambda,T}^\theta$ then follow directly from those in $(Z-e)_{\lambda,T}^\theta$; $\theta$-stability follows from Lemma \ref{lm:orientedtree} and hence we our lift lives in $Z_{\lambda,T}^\theta$.
 
-In summary, the choices of linear maps detailed above give an isomorphism $$(Z-e)_{\lambda,T}^\theta \longrightarrow Z_{\lambda,T}^\theta.$$
-After acting by $G_\bfv$ this descends to a bijection $$|\mathcal{M}_T(\mathbb{F}_q)| \longrightarrow |(\mathcal{M}-e)_T(\mathbb{F}_q)|.$$
-The result then follows from $|\Hom(V_{h(e)}, V_{t(e)})|= q$.
+In summary, the choices of linear maps detailed above give an isomorphism $$\Hom(V_{h(e)}, V_{t(e)}) \times (Z-e)_{\lambda,T}^\theta \longrightarrow Z_{\lambda,T}^\theta.$$
+After acting by $G_\bfv$ this descends to an isomorphism $(\mathcal{M}-e)_T \times \bA_k^1 \simeq \mathcal{M}_T.$
 \end{proof}
 
-\begin{cor}
+\begin{cor}\label{cor:pointsM}
 The number of points of $\cM$ over $\bF_q$ is given by $q^{2-e(Q)} f(q)$.
 \end{cor}
 
@@ -424,6 +432,343 @@ The difference $(2-e(Q))-|T|$ is precisely the number of times one uses the dele
 Theorems \ref{thm:contract} and \ref{thm:delete} along with these two observations give that $|\cM_T(\bF_q)|= q^{2 |T|} \cdot q^{(2-e(Q))-|T|} = q^{|T|+(2- e(Q))}$.
 The fact that for every $\bfp \in \cM$ there exists a unique spanning tree $T \subset Q$ such that $\bfp \in \cM_T$ then gives the result.
 \end{proof}
+
+We further note that Theorems \ref{thm:contract} and \ref{thm:delete}, and hence Corollary \ref{cor:pointsM}, remain true when our GIT stability parameter $\theta\in \bR^{Q_0}$ is 0 but $\lambda \in k^{Q_0}$ is generic.
+This follows from the following proposition.
+
+\begin{prop}
+For $\lambda \in k^{Q_0}$ generic $Z_\lambda^0 = Z_\lambda^\theta$ for any generic stability parameter $\theta\in \bR^{Q_0}$.
+\end{prop}
+
+\begin{proof}
+First note that $Z_\lambda^\theta \subset Z_\lambda^0$ since $Z_\lambda^0 = Z_\lambda$ then take $\bfp \in Z_\lambda^0$.
+Given that $\lambda$ is generic there exists $i \in Q_0$ such that $\lambda_i\neq 0$.
+Equations \ref{eq:forz} and \ref{eq:forz2} imply that there is an edge $e\in Q$ incident to $i$ for which, without loss of generality, $x_ex_e^* \neq 0$.
+Contracting $e$, by Lemma \ref{lm:contralambda} we get a representation $\bfp/e \in (Z/e)_{\lambda/e}$.
+Since $\lambda$ was generic $\lambda/e$ is too.
+We repeat the process until we get a quiver with one vertex.
+Tracing our steps back we get a tree $T \subset Q$ for which $x_e$ and $x_e^*$ are isomorphisms for every $e \in T$.
+This implies that $T$ may be oriented in any fashion.
+More precisely, $\Tbar \subset K_\bfp^o$.
+Therefore for any generic $\theta \in \bR^{Q_0}$, $T^\theta \subset K_\bfp^o$.
+Lemma \ref{lm:orientedtree} then gives us that $\bfp \in Z_\lambda^\theta$ completing the proof.
+\end{proof}
+
+\section{An example: $\widetilde{A}_2$}
+
+We go through calculations in Section~\ref{sc:qvariety} in an example.
+The example is relatively simple yet it exhibits most of the phenomena of interest.
+
+Our starting quiver $Q$ will be that of the affine Dynkin diagram of type $\widetilde{A}_2$.
+We label the vertices and edges of $Q$ as in Figure~\ref{fig:A_2graph}.
+The figure also contains the three spanning trees of $Q$ which are given by forgetting one of the three edges.
+We pick hyperk\"ahler parameters to be $[\lambda,\theta] = [0,(-2,1,1)]$ and order the edges $l>m>s$. 
+\begin{figure}[H]
+\centering
+\subfigure[The quiver $Q$]{
+\begin{pspicture}(-0.5,-0.5)(2.5,2.232)
+          \cnodeput(1,1.732){A}{0} 
+          \cnodeput(0,0){B}{1}
+          \cnodeput(2,0){C}{2}
+          \psset{nodesep=0pt}
+          \ncline{-}{A}{B} \lput*{:120}{$m$}
+          \ncline{-}{B}{C} \lput*{:U}{$l$}
+          \ncline{-}{C}{A} \lput*{:240}{$s$}
+                  \end{pspicture}
+}
+\\
+\subfigure[Tree $T_s$.]{
+\begin{pspicture}(-0.5,-0.5)(2.5,2.232)
+          \cnodeput(1,1.732){A}{0} 
+          \cnodeput(0,0){B}{1}
+          \cnodeput(2,0){C}{2}
+          \psset{nodesep=0pt}
+          \ncline[linecolor=blue]{-}{A}{B}
+          \ncline[linecolor=blue]{-}{B}{C}
+          %\ncline{-}{C}{A} \lput*{:240}{$s$}
+                  \end{pspicture}
+}\quad \quad
+\subfigure[Tree $T_m$.]{
+\begin{pspicture}(-0.5,-0.5)(2.5,2.232)
+          \cnodeput(1,1.732){A}{0} 
+          \cnodeput(0,0){B}{1}
+          \cnodeput(2,0){C}{2}
+          \psset{nodesep=0pt}
+          %\ncline{-}{A}{B} \lput*{:120}{$m$}
+          \ncline[linecolor=blue]{-}{B}{C}
+          \ncline[linecolor=blue]{-}{C}{A}
+                  \end{pspicture}
+} \quad \quad
+\subfigure[Tree $T_l$.]{
+\begin{pspicture}(-0.5,-0.5)(2.5,2.232)
+          \cnodeput(1,1.732){A}{0} 
+          \cnodeput(0,0){B}{1}
+          \cnodeput(2,0){C}{2}
+          \psset{nodesep=0pt}
+          \ncline[linecolor=blue]{-}{A}{B}
+          %\ncline{-}{B}{C} \lput*{:U}{$l$}
+          \ncline[linecolor=blue]{-}{C}{A}
+                  \end{pspicture}
+}
+\caption{The quiver $Q$ and its spanning trees.}\label{fig:A_2graph}
+\end{figure}
+
+Since our dimension vectors $\mathbf{v}, \mathbf{w}$ are $(1,\dots,1)$ and $(1,0,\ldots, 0)$ respectively, every representation in $\cM$ is isomorphic to one where the non-zero vector spaces at the vertices are the vector space $k$.
+The linear maps at the arrows are then naturally elements of $\bA^1_k$.
+We will label the vector space at the framed vertex, i.e.\ the one corresponding to the dimension vector $\bfw$, $k_\infty$ and colour the framing arrows {\color{orange} orange}.
+
+Every point in $\cM$ is equivalent to one of the representations displayed in Figure~\ref{fig:exreps}.
+The division into subfigures also indicates the cell $\cM_{T_i}$ to which the points belong.
+Arrows in {\blue blue} indicate the corresponding oriented tree ${T_i}^\theta \subset \Qbar$.
+Note that the orientation of the biggest edge $l$ (or any edge for that matter) may be different for different spanning trees.
+The result displayed in Figure~\ref{fig:exreps} gives that $|\cM(\bF_q)|=q^2+q+q=q^2+2q$.
+\begin{figure}[H]
+\centering
+\mbox{
+\subfigure[$\cM_{T_s}$: here $(q_1,q_2) \in \mathbb{A}_k^2$.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,3.5)
+          \cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          \cnodeput(0,0){B}{$k_1$}
+          \cnodeput(2,0){C}{$k_2$}
+          \psset{nodesep=0pt}
+          \ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          \ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=4pt]{<-}{A}{B} \lput*{:120}{$-q_1q_2$}
+          \ncarc[offset=4pt, linecolor=blue]{<-}{B}{A} \lput*{:300}{1}
+          \ncarc[offset=2pt]{<-}{B}{C} \lput*{:U}{$-q_1q_2$}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{C}{B} \lput*{:180}{1}
+          \ncarc[offset=2pt]{<-}{C}{A} \lput*{:240}{$q_1$}
+          \ncarc[offset=2pt]{<-}{A}{C} \lput*{:60}{$q_2$}
+                  \end{pspicture}
+}
+
+\subfigure[$\cM_{T_m}$: here $q \in \mathbb{A}_k^1$.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,3.5)
+          \cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          \cnodeput(0,0){B}{$k_1$}
+          \cnodeput(2,0){C}{$k_2$}
+          \psset{nodesep=0pt}
+          \ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          \ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=2pt]{<-}{A}{B} \lput*{:120}{$q$}
+          \ncarc[offset=2pt]{<-}{B}{A} \lput*{:300}{0}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{B}{C} \lput*{:U}{1}
+          \ncarc[offset=2pt]{<-}{C}{B} \lput*{:180}{0}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{C}{A} \lput*{:240}{1}
+          \ncarc[offset=2pt]{<-}{A}{C} \lput*{:60}{0}
+                  \end{pspicture}
+}
+
+\subfigure[$\cM_{T_l}$: here $q \in \mathbb{A}_k^1$.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,3.5)
+          \cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          \cnodeput(0,0){B}{$k_1$}
+          \cnodeput(2,0){C}{$k_2$}
+          \psset{nodesep=0pt}
+          \ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          \ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=2pt]{<-}{A}{B} \lput*{:120}{0}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{B}{A} \lput*{:300}{1}
+          \ncarc[offset=2pt]{<-}{B}{C} \lput*{:U}{$q$}
+          \ncarc[offset=2pt]{<-}{C}{B} \lput*{:180}{0}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{C}{A} \lput*{:240}{1}
+          \ncarc[offset=2pt]{<-}{A}{C} \lput*{:60}{0}
+                  \end{pspicture}
+}}
+\caption{Cell decomposition of $\cM$.}\label{fig:exreps}
+\end{figure}
+
+% \begin{equation*}
+% \begin{tikzpicture}
+% \node (0) at (1.5,2.598) [shape=circle,draw, thick]{0};
+% \node (1) at (0,0) [shape=circle,draw, thick]{1};
+% \node (2) at (3,0) [shape=circle,draw, thick]{2};
+% \draw [very thick] (0) -- (1) -- (2) -- (0);
+% \node (l) at (1.5,0) [fill=white]{l};
+% \node (m) at (0.75, 1.229) [fill=white]{m};
+% \node (s) at (2.25, 1.229) [fill=white]{s};
+% \end{tikzpicture}
+% \end{equation*}
+
+In Figure~\ref{fig:delcontra} we go through the deletion/contraction definition of $\cM_T$ given in Notation~\ref{notn:intree} for the tree $T_m$.
+We will drop the framing vertex since it plays no role in the calculation.
+We will indicate the biggest edge using the colour {\green green}.
+The dual of arrows killed by the deletion process will be coloured {\red red}.
+We will drop the zero arrows as we go along.
+\begin{figure}[H]
+\centering
+\subfigure[The oriented tree $T_m^\theta$.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,2.232)
+          %\cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$0$} 
+          \cnodeput(0,0){B}{$1$}
+          \cnodeput(2,0){C}{$2$}
+          \psset{nodesep=0pt}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          %\ncarc[offset=2pt]{<-}{A}{B} \lput*{:120}{$q$}
+          %\ncarc[offset=2pt]{<-}{B}{A} \lput*{:300}{0}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{B}{C}
+          %\ncarc[offset=2pt]{<-}{C}{B} \lput*{:180}{0}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{C}{A}
+          %\ncarc[offset=2pt]{<-}{A}{C} \lput*{:60}{0}
+                  \end{pspicture}
+}
+\\
+\subfigure[Edge $l$ to be contracted.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,2.232)
+          %\cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          \cnodeput(0,0){B}{$k_1$}
+          \cnodeput(2,0){C}{$k_2$}
+          \psset{nodesep=0pt}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=2pt]{<-}{A}{B} \lput*{:120}{$q$}
+          \ncarc[offset=2pt]{<-}{B}{A} \lput*{:300}{0}
+          \ncarc[offset=2pt, linecolor=green]{<-}{B}{C} \lput*{:U}{1}
+          \ncarc[offset=2pt, linecolor=green]{<-}{C}{B} \lput*{:180}{0}
+          \ncarc[offset=2pt]{<-}{C}{A} \lput*{:240}{1}
+          \ncarc[offset=2pt]{<-}{A}{C} \lput*{:60}{0}
+                  \end{pspicture}
+}
+\subfigure[Edge $m$ to be deleted.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,2.232)
+          %\cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          %\cnodeput(0,0){B}{$k_1$}
+          %\cnodeput(2,0){C}{$k_2$}
+          \cnodeput(1,0){BC}{$k_{12}$}
+          \psset{nodesep=0pt}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=2pt]{->}{A}{BC} \lput*{:90}{1}
+          \ncarc[offset=2pt, linecolor=green]{->}{BC}{A} \lput*{:270}{q}
+          %\ncarc[offset=2pt]{<-}{B}{C} \lput*{:U}{$q$}
+          %\ncarc[offset=2pt]{<-}{C}{B} \lput*{:180}{0}
+          \ncarc[offset=10pt,linecolor=green]{<-}{BC}{A} \lput*{:270}{0}
+          \ncarc[offset=10pt]{<-}{A}{BC} \lput*{:270}{0}
+                  \end{pspicture}
+}
+\subfigure[Edge $s$ to be contracted.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,2.232)
+          %\cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          %\cnodeput(0,0){B}{$k_1$}
+          %\cnodeput(2,0){C}{$k_2$}
+          \cnodeput(1,0){BC}{$k_{12}$}
+          \psset{nodesep=0pt}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=2pt, linecolor=green]{<-}{A}{BC} \lput*{:90}{0}
+          %\ncarc[offset=2pt, linecolor=green]{->}{BC}{A} \lput*{:270}{q}
+          %\ncarc[offset=2pt]{<-}{B}{C} \lput*{:U}{$q$}
+          %\ncarc[offset=2pt]{<-}{C}{B} \lput*{:180}{0}
+          \ncarc[offset=10pt,linecolor=red]{->}{BC}{A} \lput*{:270}{q}
+          \ncarc[offset=2pt, linecolor=green]{<-}{BC}{A} \lput*{:270}{1}
+                  \end{pspicture}
+}
+\\
+\subfigure[End of the process.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,2.232)
+          %\cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,0.5){ABC}{$k_{012}$} 
+          %\cnodeput(0,0){B}{$k_1$}
+          %\cnodeput(2,0){C}{$k_2$}
+          %\cnodeput(1,0){BC}{$k_{12}$}
+          %\psset{nodesep=0pt}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          %\ncarc[offset=2pt]{->,linecolor=blue}{A}{BC} \lput*{:90}{1}
+          %\ncarc[offset=2pt, linecolor=green]{->}{BC}{A} \lput*{:270}{q}
+          %\ncarc[offset=2pt]{<-}{B}{C} \lput*{:U}{$q$}
+          %\ncarc[offset=2pt]{<-}{C}{B} \lput*{:180}{0}
+          %\ncarc[offset=10pt,linecolor=green]{<-}{BC}{A} \lput*{:270}{0}
+          %\ncarc[offset=10pt]{<-}{A}{BC} \lput*{:270}{0}
+          \nccircle[nodesep=3pt, linecolor=red]{<-}{ABC}{.6cm}\lput*{:180}{q}
+                  \end{pspicture}
+}
+\caption{Contraction/deletion process on $T_m$.}\label{fig:delcontra}
+\end{figure}
+
+We now change the ordering so that $s>l>m$ and examine the decomposition of the $\cM$ into cells indexed under this ordering.
+We again drop the framing from the figure since it plays no role.
+This cell decomposition is displayed in Figure~\ref{fig:exreps2}.
+Although the representations do change cells, the decomposition $\cM = \bA_k^2 \sqcup \bA_k^1 \sqcup \bA_k^1$ remains the same.
+
+\begin{figure}[H]
+\centering
+\mbox{
+\subfigure[$\cM_{T_s}$: here $q \in \mathbb{A}_k^1$.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,2.232)
+          %\cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          \cnodeput(0,0){B}{$k_1$}
+          \cnodeput(2,0){C}{$k_2$}
+          \psset{nodesep=0pt}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=3pt]{<-}{A}{B} \lput*{:120}{0}
+          \ncarc[offset=3pt, linecolor=blue]{<-}{B}{A} \lput*{:300}{1}
+          \ncarc[offset=2pt]{<-}{B}{C} \lput*{:U}{0}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{C}{B} \lput*{:180}{1}
+          \ncarc[offset=2pt]{<-}{C}{A} \lput*{:240}{0}
+          \ncarc[offset=2pt]{<-}{A}{C} \lput*{:60}{$q$}
+                  \end{pspicture}
+}
+
+\subfigure[$\cM_{T_m}$: here $(q_1,q_2) \in \mathbb{A}_k^2$.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,2.232)
+          %\cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          \cnodeput(0,0){B}{$k_1$}
+          \cnodeput(2,0){C}{$k_2$}
+          \psset{nodesep=0pt}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=4pt]{<-}{A}{B} \lput*{:120}{$q_2$}
+          \ncarc[offset=3pt]{<-}{B}{A} \lput*{:300}{$q_1$}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{B}{C} \lput*{:U}{1}
+          \ncarc[offset=2pt]{<-}{C}{B} \lput*{:180}{$-q_1q_2$}
+          \ncarc[offset=6pt, linecolor=blue]{<-}{C}{A} \lput*{:240}{1}
+          \ncarc[offset=6pt]{<-}{A}{C} \lput*{:60}{$-q_1q_2$}
+                  \end{pspicture}
+}
+
+\subfigure[$\cM_{T_l}$: here $(q_1,q_2) \in \mathbb{A}_k^2$.]{
+\psset{unit=1.3cm}
+\begin{pspicture}(-0.4,-0.5)(2.4,2.232)
+          %\cnodeput(1,3){I}{$k_\infty$}
+          \cnodeput(1,1.732){A}{$k_0$} 
+          \cnodeput(0,0){B}{$k_1$}
+          \cnodeput(2,0){C}{$k_2$}
+          \psset{nodesep=0pt}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{I}{A}\lput*{:90}{1}
+          %\ncline[linecolor=orange, offset=-4pt]{->}{A}{I}\lput*{:270}{0}
+          \ncarc[offset=2pt]{<-}{A}{B} \lput*{:120}{0}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{B}{A} \lput*{:300}{1}
+          \ncarc[offset=2pt]{<-}{B}{C} \lput*{:U}{0}
+          \ncarc[offset=2pt]{<-}{C}{B} \lput*{:180}{$q$}
+          \ncarc[offset=2pt, linecolor=blue]{<-}{C}{A} \lput*{:240}{1}
+          \ncarc[offset=2pt]{<-}{A}{C} \lput*{:60}{0}
+                  \end{pspicture}
+}}
+\caption{Cell decomposition of $\cM$: different ordering.}\label{fig:exreps2}
+\end{figure}
+
 
 \bibliographystyle{amsalpha}
 \bibliography{references}
