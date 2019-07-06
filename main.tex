@@ -313,7 +313,13 @@ Any edge between the connected components will be not have the correct orientati
 As in Section \ref{sc:indecomp}, we fix an ordering on the edges of $Q$.
 
 \begin{notn}\label{notn:intree}
-Fix a stability parameter $\theta \in \bR^{Q_0}$. Let $T \subset Q$ be a subtree and $e\in Q_1$ be the biggest edge. We say 
+%{\red Error here.}
+Fix a stability parameter $\theta \in \bR^{Q_0}$. 
+Let $T \subset Q$ be a subtree and $e\in Q_1$ be the biggest edge. 
+When $e \notin T$, we let $C_{T,e}$ be the unique cycle of the graph obtained from adding $e$ to $T$.
+The orientation of the smallest edge of $C_{T,e}$ in $T^\theta$ defines an orientation on $C_{T,e}$ and therefore an orientation on the edge $e$.
+Assume $e \in Q$ is oriented in the opposite direction to this induced, otherwise swap $x_e$ for $x_e^*$ in the following.
+We say 
 %$\bfp \in \cR(Q)_T^\theta$ if either of the following statements if either:
 %\begin{align*}
 %     (e \in T \text{ and } T^\theta \subset K_\bfp^o) &\Longrightarrow \cR(Q/e)_T^\theta \\
@@ -321,7 +327,7 @@ Fix a stability parameter $\theta \in \bR^{Q_0}$. Let $T \subset Q$ be a subtree
 % \end{align*}
 %$$e \in T \text{ and } T^\theta \subset K_\bfp^o \Longrightarrow \cR(Q/e)_T^\theta$$ or
 %$$e \notin T \Longrightarrow \cR(Q-e)_T^\theta.$$
-$$\bfp \in \cR(Q)_T^\theta \,\text{ if }\,\,\begin{cases} \bfp/e \in \cR(Q/e)_T^\theta & \text{ when } e \in T \text{ and } T^\theta \subset K_\bfp^o \\ \bfp-e \in \cR(Q-e)_T^\theta & \text{ otherwise}.\end{cases}$$
+$$\bfp \in \cR(Q)_T^\theta \,\text{ if } T^\theta \subset K_\bfp^o \text{ and } \,\,\begin{cases} \bfp/e \in \cR(Q/e)_T^\theta & \text{ when } e \in T. \\ \bfp-e \in \cR(Q-e)_T^\theta & \text{ when } e \notin T \text{ and } x_e =0.\end{cases}$$
 If $Q$ has one vertex then $T$ is empty and we take every $\bfp \in \cR(Q)$ to be in $\cR(Q)_T$.
 Furthermore, $Z_{\lambda,T}^\theta$ will denote $Z_{\lambda} \cap \cR(Q)_T^\theta$.
 \end{notn}
@@ -342,9 +348,15 @@ Furthermore, $Z_{\lambda,T}^\theta$ will denote $Z_{\lambda} \cap \cR(Q)_T^\thet
 % For $T$ a spanning tree of $Q$, we use $\mathcal{R}(Q)_T$ and $Z_T$ to denote the subset of the representation space $$\{ \bfp\in \mathcal{R}(Q) \,|\, T \subset K_\bfp\}$$ and its intersection with $Z$, respectively.
 % Lemma \ref{lm:coninvgr2} then implies that $\mathcal{R}(Q)$ is a union of such spaces.
 % Furthermore, we note that $\mathcal{R}(Q)_T$ is invariant under the action of $G_\mathbf{v}$.
-% We will use $\cM_T$ to denote the the subset of $\cM$ whose points parameterise equivalence classes in $\cR(Q)$
-Lemma \ref{lm:orientedtree} implies that for every $\theta$-stable $\bfp \in \cR(Q)$ there exists a tree $T \subset Q$ for which $\bfp \in \cR(Q)_T^\theta$.
-The definition of $\cR(Q)_T^\theta$ implies that this tree is unique.
+%We will use $\cM_T$ to denote the the subset of $\cM$ whose points parameterise equivalence classes in $\cR(Q)$
+%Lemma \ref{lm:orientedtree} implies that for every $\theta$-stable $\bfp \in \cR(Q)$ there exists a tree $T \subset Q$ for which $\bfp \in \cR(Q)_T^\theta$.
+%The definition of $\cR(Q)_T^\theta$ implies that this tree is unique.
+
+\begin{prop}\label{prop:existenceanduniqueness}
+For every $\theta$-stable $\bfp \in \cR(Q)$ there exists a unique tree $T \subset Q$ for which $\bfp \in \cR(Q)_T^\theta$. 
+\end{prop}
+
+We delay the proof of Proposition \ref{existenceanduniqueness} until after the proof of Theorem \ref{thm:contract} below.
 
 The subsets $\cR(Q)_T^\theta$ and $Z_{\lambda,T}^\theta$ are $G_\bfv$-invariant since whether or not a linear map is an isomorphism is fixed by this action.
 We will use $\cM_T \subset \cM$ to denote the quotient of $Z_{\lambda,T}^\theta$ by the $G_\bfv$-action.
