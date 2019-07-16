@@ -263,7 +263,7 @@ Fix $\theta \in \bR^{Q_0}$ a generic stability parameter and let $T$ be a spanni
 We will write $T^\theta$ for the oriented spanning tree of $\Qbar$ defined by the $\theta$ induced orientation.
 \end{notn}
 
-\begin{lem}[Orientation is preserved under contraction]
+\begin{lem}[Orientation is preserved under contraction]\label{lm:stab}
 Fix $\theta \in \bR^{Q_0}$ a generic stability parameter and let $T$ be a spanning tree of $Q$.
 For $e \in T^\theta$, we have that $(T^\theta)/e \subset \overline{(Q/e)}$ is the $\theta/e$ oriented spanning tree of the spanning tree $T/e \subset Q/e$.
 Here we abuse notation and refer to the edge in $Q$ and a corresponding edge in $\Qbar$ by the same symbol $e$.
@@ -316,9 +316,9 @@ As in Section \ref{sc:indecomp}, we fix an ordering on the edges of $Q$.
 %{\red Error here.}
 Fix a stability parameter $\theta \in \bR^{Q_0}$. 
 Let $T \subset Q$ be a subtree and $e\in Q_1$ be the biggest edge. 
-When $e \notin T$, we let $C_{T,e}$ be the unique cycle of the graph obtained from adding $e$ to $T$.
-The orientation of the smallest edge of $C_{T,e}$ in $T^\theta$ defines an orientation on $C_{T,e}$ and therefore an orientation on the edge $e$.
-Assume $e \in Q$ is oriented in the opposite direction to this induced, otherwise swap $x_e$ for $x_e^*$ in the following.
+When $e \notin T$, we let $C_{T,e}$ be the unique unoriented cycle of the graph obtained from adding $e$ to $T$.
+The orientation of the smallest edge of $C_{T,e}$ in $T^\theta$ defines a direction around the cycle $C_{T,e}$.
+Assume $e \in Q$ is oriented in the opposite direction to the one induced by the smallest edge, otherwise swap $x_e$ for $x_e^*$ in the following.
 We say 
 %$\bfp \in \cR(Q)_T^\theta$ if either of the following statements if either:
 %\begin{align*}
@@ -352,16 +352,49 @@ Furthermore, $Z_{\lambda,T}^\theta$ will denote $Z_{\lambda} \cap \cR(Q)_T^\thet
 %Lemma \ref{lm:orientedtree} implies that for every $\theta$-stable $\bfp \in \cR(Q)$ there exists a tree $T \subset Q$ for which $\bfp \in \cR(Q)_T^\theta$.
 %The definition of $\cR(Q)_T^\theta$ implies that this tree is unique.
 
-\begin{prop}\label{prop:existenceanduniqueness}
-For every $\theta$-stable $\bfp \in \cR(Q)$ there exists a unique tree $T \subset Q$ for which $\bfp \in \cR(Q)_T^\theta$. 
-\end{prop}
-
-We delay the proof of Proposition \ref{existenceanduniqueness} until after the proof of Theorem \ref{thm:contract} below.
-
 The subsets $\cR(Q)_T^\theta$ and $Z_{\lambda,T}^\theta$ are $G_\bfv$-invariant since whether or not a linear map is an isomorphism is fixed by this action.
 We will use $\cM_T \subset \cM$ to denote the quotient of $Z_{\lambda,T}^\theta$ by the $G_\bfv$-action.
 Moreover, for $e\in Q_1$ a non-loop edge we introduce the notation $\cM/e$ for the Nakajima quiver variety on the contracted quiver $Q/e$ with dimension vectors $\bfv= (1,\ldots,1)$, $\bfw= (1,0,\ldots,0)$ and hyper-K\"ahler parameters $\lambda/e$ and $\theta/e$.
 We use $\cM-e$ in an analogous fashion.
+
+We now turn to showing that this labelling by trees gives a stratification of our moduli space $\cM$, i.e.\ that for every $\theta$-stable $\bfp \in \cR(Q)$ there exists a tree $T \subset Q$ for which $\bfp \in \cR(Q)_T^\theta$.
+We begin with a lemma.
+
+\begin{lem}
+Take $e \in Q$ and let $\cM_{e} \subset \cM$ denote the open subvariety of representations for which the linear map $x_e$ is an isomorphism.
+The moduli space $\cM_{e}$ is isomorphic to $\cM/e$.
+\end{lem}
+
+\begin{proof}
+The morphism $Z_\lambda \rightarrow (Z/e)_\lambda$ given by $\bfp \mapsto \bfp/e$ is $G_\bfv$-equivariant.
+Furthermore, by Lemma \ref{lm:stab}, it preserves $\theta$-stability giving a morphism $\cM_{e} \rightarrow \cM/e$. 
+Next we construct an inverse morphism.
+
+Take $\bfq \in (Z/e)_{\lambda}^\theta$, the aim is to provide a lift $\bfp \in Z_{\lambda}^\theta$.
+We start by defining linear maps for every edge in $\Qbar^\heartsuit$.
+The linear maps associated to edges not incident to $t(e)$ or $h(e)$ are clear.
+For all non-$e$ edges incident to $t(e)$ and $h(e)$, we choose isomorphisms $\phi \colon V_{t(e)} \rightarrow V_\iota$ and $\psi \colon V_\iota \rightarrow V_{h(e)}$ to unwind their corresponding linear maps and define $x_e$ to be $\psi \circ \phi$.
+This choice of $\phi$ and $\psi$ will come out in the wash when we quotient by the action of $G_\bfv$.
+The only ambiguity left is the linear map associated to $x_e^*$.
+We use the equation corresponding to $t(e)$ from either (\ref{eq:forz}) or (\ref{eq:forz2}) to read off $x_e^*$: post-multiplying the equation by $x_e^{-1}$ reduces the $e$-term to $x_e^*$.
+One could have equally well used the equation corresponding to $h(e)$ to yield the same result.
+Up to the choice of isomorphisms $\phi$ and $\psi$, we have a point $\bfp \in Z_\lambda$ and since $x_e$ is an isomorphism by construction $\bfp$ gives a class in $\cM/e$.
+
+It remains to act by $G_\bfv$ to remove the ambiguity of the choice of $\phi$ and $\psi$ and descend to a morphism $\cM/e \rightarrow \cM_e$.
+Checking these are mutual inverses is left to the reader.
+\end{proof}
+
+\begin{prop}\label{prop:existenceanduniqueness}
+For every $\theta$-stable $\bfp \in \cR(Q)$ there exists a unique tree $T \subset Q$ for which $\bfp \in \cR(Q)_T^\theta$. 
+\end{prop}
+
+\begin{proof}
+By Lemma above there exists a tree that is oriented for the given point. If e is in it we can contract and work by induction on the number of vertices. Assume e is not in it and that it is pointing in the wrong direction. I need to say something about deletion but it's not a big deal. Then take it and remove the smallest edge in our cycle. Claim is that e is now in T and everything is oriented right.
+
+Assume there are two competing trees, they'll get to a point where e is in it and e isn't. Assume that e isn't but gets deleted 
+\end{proof}
+
+%We delay the proof of Proposition \ref{prop:existenceanduniqueness} until after the proof of Theorem \ref{thm:contract} below.
 
 \begin{thm}\label{thm:contract}
 Let $T$ be a spanning tree of $Q$ and $e$ be the biggest edge in $Q$. 
