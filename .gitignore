@@ -1,5 +1,7 @@
-
-*.gz
+*.aux
+*.bbl
+*.blg
 *.log
 *.pdf
-*.aux
+*.gz
+*.dvi
